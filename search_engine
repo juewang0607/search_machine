@@ -1,0 +1,29 @@
+//
+//  main.cpp
+//  search_machine
+//
+//  Created by Jue wang on 7/9/20.
+//  Copyright © 2020 Jue wang. All rights reserved.
+//
+
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+using namespace std;
+
+int main (){
+    string line;
+    ifstream myfile ("/Users/juewang/Desktop/search_machine/search_machine/中文停用词库.txt");
+    // ifstream myfile ("/Users/juewang/Desktop/search_machine/search_machine/百度分词词库.txt");
+    if (myfile.is_open())
+    {
+        while (getline (myfile, line))
+        {
+            cout<< line << '\n';
+        }
+        myfile.close();
+    }
+    else cout<<"unable to open file";
+    return 0;
+}
+
