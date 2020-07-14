@@ -9,6 +9,7 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <unordered_map>
 using namespace std;
 
 // unprdered_map is the hashmap implemented in C++
@@ -36,32 +37,31 @@ int main (){
 // parameter: absolute path of dataset
 // no output, save all words in "unordered_map wordLibrary"
 void loadWordLibrary(string path) {
-	
+    
 }
 
 // parameter: absolute path of stopword
 // no output, save all stopwords in "unordered_map stopWords"
 void loadStopWords(string path) {
-	
+    
 }
 
 // parameter: absolute path of music dataset
 // output: convert each music as a string, save them with a vector
 vector<string> loadData(string path) {
-	
+    
 }
 
 // parameter: music content, which is a string
 // output: split that into a vector of strings (forward index)
 // e.g. 繁华中落入空门 -> [繁华，中，落入，空门]
 vector<string> splitWords(string line) {
-	
+    
 }
 
-// parameter: vector(different music) of vector(various words within the music) 
+// parameter: vector(different music) of vector(various words within the music)
 // no output, save index in "unordered_map index", word as key, list of music index who contains that word as value
 void buildInvertIndex(vector<vector<string>> music) {
-	
+    
 }
-
 
