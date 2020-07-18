@@ -17,33 +17,42 @@ unordered_map<string, int> wordLibrary;
 unordered_map<string, int> stopWords;
 unordered_map<string, vector<int>> index;
 
-int main (){
-    string line;
-    ifstream myfile ("/Users/juewang/Desktop/search_machine/search_machine/中文停用词库.txt");
-    // ifstream myfile ("/Users/juewang/Desktop/search_machine/search_machine/百度分词词库.txt");
-    if (myfile.is_open())
-    {
-        while (getline (myfile, line))
-        {
-            cout<< line << '\n';
-        }
-        myfile.close();
-    }
-    else cout<<"unable to open file";
-    return 0;
-}
-
 
 // parameter: absolute path of dataset
 // no output, save all words in "unordered_map wordLibrary"
 void loadWordLibrary(string path) {
-    
+    //initailzie container
+    // read the element in the text
+    string line;
+    ifstream myfile(path);
+    if (myfile.is_open())
+    {
+        while (getline (myfile, line))
+        {
+            wordLibrary[line] = 1;
+        }
+        myfile.close();
+    }
+    else cout<<"unable to open file";
+    return;
 }
-
 // parameter: absolute path of stopword
 // no output, save all stopwords in "unordered_map stopWords"
 void loadStopWords(string path) {
-    
+    //initailzie container
+    // read the element in the text
+    string line;
+    ifstream myfile(path);
+    if (myfile.is_open())
+    {
+        while (getline (myfile, line))
+        {
+            wordLibrary[line] = 1;
+        }
+        myfile.close();
+    }
+    else cout<<"unable to open file";
+    return;
 }
 
 // parameter: absolute path of music dataset
@@ -63,5 +72,13 @@ vector<string> splitWords(string line) {
 // no output, save index in "unordered_map index", word as key, list of music index who contains that word as value
 void buildInvertIndex(vector<vector<string>> music) {
     
+}
+
+int main (){
+    loadWordLibrary
+       ("/Users/juewang/Desktop/search_machine/search_machine/百度分词词库.txt");
+    loadStopWords
+    ("/Users/juewang/Desktop/search_machine/search_machine/中文停用词库.txt");
+    return 0;
 }
 
