@@ -5,21 +5,21 @@
 //  Created by Jue wang on 7/9/20.
 //  Copyright © 2020 Jue wang. All rights reserved.
 //
-
 #include <iostream>
 #include <iomanip>
 #include <fstream>
 #include <unordered_map>
+#include <vector>
 using namespace std;
 
 // unprdered_map is the hashmap implemented in C++
 unordered_map<string, int> wordLibrary;
 unordered_map<string, int> stopWords;
-unordered_map<string, vector<int>> index;
-
+unordered_map<string, vector<int>> index0;
 
 // parameter: absolute path of dataset
 // no output, save all words in "unordered_map wordLibrary"
+
 void loadWordLibrary(string path) {
     //initailzie container
     // read the element in the text
@@ -29,13 +29,14 @@ void loadWordLibrary(string path) {
     {
         while (getline (myfile, line))
         {
-            wordLibrary[line] = 1;
+            wordLibrary[line.substr(2,line.length())] = 1;
         }
         myfile.close();
     }
     else cout<<"unable to open file";
     return;
 }
+
 // parameter: absolute path of stopword
 // no output, save all stopwords in "unordered_map stopWords"
 void loadStopWords(string path) {
@@ -47,7 +48,7 @@ void loadStopWords(string path) {
     {
         while (getline (myfile, line))
         {
-            wordLibrary[line] = 1;
+            stopWords[line] = 1;
         }
         myfile.close();
     }
@@ -55,30 +56,77 @@ void loadStopWords(string path) {
     return;
 }
 
+
 // parameter: absolute path of music dataset
 // output: convert each music as a string, save them with a vector
 vector<string> loadData(string path) {
-    
+    //initailzie container
+    // read the element in the text
+    vector<string> vLoadData;
+    string line;
+    ifstream myfile(path);
+    if (myfile.is_open())
+    {
+        // if the file has lines
+        while (getline (myfile, line))
+        {
+            int start = line.find("geci");
+            int interval = line.find("composer")-start;
+            string str = line.substr(start+7,interval-10);
+            str.erase(std::remove(str.begin(),str.end(),','),str.end());
+            str.erase(std::remove(str.begin(),str.end(),'"'),str.end());
+            str.erase(std::remove(str.begin(),str.end(),'['),str.end());
+            str.erase(std::remove(str.begin(),str.end(),']'),str.end());
+            str.erase(std::remove(str.begin(),str.end(),' '),str.end());
+            //cout<<str<<endl;
+            vLoadData.push_back(str);
+        }
+        myfile.close();
+    }
+    else cout<<"unable to open file";
+    return vLoadData;
 }
+
+
 
 // parameter: music content, which is a string
 // output: split that into a vector of strings (forward index)
 // e.g. 繁华中落入空门 -> [繁华，中，落入，空门]
 vector<string> splitWords(string line) {
-    
+    vector<string> vSplitWords;
+    string temp;
+    ifstream myfile("/Users/juewang/Desktop/search_machine/search_machine/百度分词词库.txt");
+    if (myfile.is_open())
+        while (getline (myfile, line))
+        {
+            string saveData = "";
+            while (line.length() != 0)
+            {
+                for (int i = 30;i>0;i -= 3)
+                {
+                    string temp = line.substr(0,i);
+                    if (wordLibrary.count(temp) != 0)
+                    {
+                        saveData = temp;
+                        vSplitWords.push_back(saveData);
+                        break;
+                    }
+                }
+                line = line.substr(saveData.length(),line.length()+saveData.length());
+            }
+        }
+    return vSplitWords;
 }
-
+/*
 // parameter: vector(different music) of vector(various words within the music)
 // no output, save index in "unordered_map index", word as key, list of music index who contains that word as value
 void buildInvertIndex(vector<vector<string>> music) {
     
 }
-
+*/
 int main (){
     loadWordLibrary
-       ("/Users/juewang/Desktop/search_machine/search_machine/百度分词词库.txt");
-    loadStopWords
-    ("/Users/juewang/Desktop/search_machine/search_machine/中文停用词库.txt");
+        ("/Users/juewang/Desktop/search_machine/search_machine/百度分词词库.txt");
+    loadStopWords("/Users/juewang/Desktop/search_machine/search_machine/中文停用词库.txt");
     return 0;
 }
-
