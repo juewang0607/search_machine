@@ -115,9 +115,9 @@ vector<string> splitWords(string line) {
 vector<string> deleteWords(vector<string,int> v){
     vector<string> vDeleteWords;
     for (auto& x: v){
-        if (stopWords.count(v) == 0)
+        if (stopWords.count(x) == 0)
            {
-               vDeleteWords.push_back(v);
+               vDeleteWords.push_back(x);
            }
     }
     return vDeleteWords;
