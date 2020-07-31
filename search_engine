@@ -110,6 +110,18 @@ vector<string> splitWords(string line) {
     return vSplitWords;
 }
 
+// parameter: music content, which is a string
+// output: delete words in the 中文停用词库
+vector<string> deleteWords(vector<string,int> v){
+    vector<string> vDeleteWords;
+    for (auto& x: v){
+        if (stopWords.count(v) == 0)
+           {
+               vDeleteWords.push_back(v);
+           }
+    }
+    return vDeleteWords;
+}
 
 /*
 // parameter: vector(different music) of vector(various words within the music)
