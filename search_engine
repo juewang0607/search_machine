@@ -87,36 +87,30 @@ vector<string> loadData(string path) {
     return vLoadData;
 }
 
-
-
 // parameter: music content, which is a string
 // output: split that into a vector of strings (forward index)
 // e.g. 繁华中落入空门 -> [繁华，中，落入，空门]
 vector<string> splitWords(string line) {
     vector<string> vSplitWords;
-    string temp;
-    ifstream myfile("/Users/juewang/Desktop/search_machine/search_machine/百度分词词库.txt");
-    if (myfile.is_open())
-        while (getline (myfile, line))
+    string saveData = "";
+    while (line.length() != 0)
+    {
+        for (int i = 30;i>0;i -= 3)
         {
-            string saveData = "";
-            while (line.length() != 0)
+            string temp = line.substr(0,i);
+            if (wordLibrary.count(temp) != 0)
             {
-                for (int i = 30;i>0;i -= 3)
-                {
-                    string temp = line.substr(0,i);
-                    if (wordLibrary.count(temp) != 0)
-                    {
-                        saveData = temp;
-                        vSplitWords.push_back(saveData);
-                        break;
-                    }
-                }
-                line = line.substr(saveData.length(),line.length()+saveData.length());
+                saveData = temp;
+                vSplitWords.push_back(saveData);
+                break;
             }
         }
+        line = line.substr(saveData.length(),line.length()+saveData.length());
+    }
     return vSplitWords;
 }
+
+
 /*
 // parameter: vector(different music) of vector(various words within the music)
 // no output, save index in "unordered_map index", word as key, list of music index who contains that word as value
