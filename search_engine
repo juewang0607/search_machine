@@ -16,6 +16,8 @@ using namespace std;
 unordered_map<string, int> wordLibrary;
 unordered_map<string, int> stopWords;
 unordered_map<string, vector<int>> index0;
+vector<string> vLoadData;
+vector<string> vSplitWords;
 
 // parameter: absolute path of dataset
 // no output, save all words in "unordered_map wordLibrary"
@@ -48,7 +50,7 @@ void loadStopWords(string path) {
     {
         while (getline (myfile, line))
         {
-            stopWords[line] = 1;
+            stopWords[line.substr(0,line.length()-1)] = 1;
         }
         myfile.close();
     }
@@ -62,7 +64,6 @@ void loadStopWords(string path) {
 vector<string> loadData(string path) {
     //initailzie container
     // read the element in the text
-    vector<string> vLoadData;
     string line;
     ifstream myfile(path);
     if (myfile.is_open())
@@ -87,11 +88,12 @@ vector<string> loadData(string path) {
     return vLoadData;
 }
 
+
+
 // parameter: music content, which is a string
 // output: split that into a vector of strings (forward index)
 // e.g. 繁华中落入空门 -> [繁华，中，落入，空门]
 vector<string> splitWords(string line) {
-    vector<string> vSplitWords;
     string saveData = "";
     while (line.length() != 0)
     {
@@ -112,7 +114,7 @@ vector<string> splitWords(string line) {
 
 // parameter: music content, which is a string
 // output: delete words in the 中文停用词库
-vector<string> deleteWords(vector<string,int> v){
+vector<string> deleteWords(vector<string> v){
     vector<string> vDeleteWords;
     for (auto& x: v){
         if (stopWords.count(x) == 0)
@@ -123,16 +125,28 @@ vector<string> deleteWords(vector<string,int> v){
     return vDeleteWords;
 }
 
+
 /*
 // parameter: vector(different music) of vector(various words within the music)
 // no output, save index in "unordered_map index", word as key, list of music index who contains that word as value
 void buildInvertIndex(vector<vector<string>> music) {
+    for (auto& x: music)
+    {
+        
+    }
     
 }
 */
+
+
+
 int main (){
     loadWordLibrary
         ("/Users/juewang/Desktop/search_machine/search_machine/百度分词词库.txt");
     loadStopWords("/Users/juewang/Desktop/search_machine/search_machine/中文停用词库.txt");
+    loadData("/Users/juewang/Desktop/search_machine/search_machine/music.json");
+    for(auto& x: vLoadData)
+        splitWords(x);
+    deleteWords(vSplitWords);
     return 0;
 }
