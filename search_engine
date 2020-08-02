@@ -17,8 +17,6 @@ unordered_map<string, int> wordLibrary;
 unordered_map<string, int> stopWords;
 unordered_map<string, vector<int>> index0;
 vector<string> vLoadData;
-vector<string> vSplitWords;
-vector<vector<string>> totalMusic;
 
 // parameter: absolute path of dataset
 // no output, save all words in "unordered_map wordLibrary"
@@ -95,6 +93,7 @@ vector<string> loadData(string path) {
 // output: split that into a vector of strings (forward index)
 // e.g. 繁华中落入空门 -> [繁华，中，落入，空门]
 vector<string> splitWords(string line) {
+    vector<string> vSplitWords;
     string saveData = "";
     while (line.length() != 0)
     {
@@ -112,6 +111,29 @@ vector<string> splitWords(string line) {
     }
     return vSplitWords;
 }
+
+// other way to implemnet splitWords
+/*
+vector<string> splitWords(string line) {
+    vector<string> vSplitWords;
+    string saveData = "";
+    for (int i = 0; i<line.length(); ) {
+        for (int l = 30; l>=; l-=3) {
+            string temp = line.substr(i,i+l);
+            if (wordLibrary.count(temp) != 0)
+            {
+                saveData = temp;
+                vSplitWords.push_back(saveData);
+                i += l;
+                break;
+            }
+        }
+        i += 3; // case where even single character does not match
+    }
+
+    return vSplitWords;
+}
+*/
 
 // parameter: music content, which is a string
 // output: delete words in the 中文停用词库
@@ -150,16 +172,15 @@ int main (){
         cout << ' ' << *it;
     cout << '\n';
     
+    vector<vector<string>> totalMusic;
     
     
-    for(auto& x: vLoadData)
-        
-        totalMusic.push_back(splitWords(x));
+    for(auto& x: vLoadData) {
+        totalMusic.push_back(deleteWords(splitWords(x)));
         for (int i = 0; i < totalMusic[0].size() ; i++) { // print all string in first vector of 'arr'
            cout << totalMusic[0][i] << " ";
         }
-    
-        
+    }
     
         
     /*
@@ -167,7 +188,6 @@ int main (){
     for(auto& x: totalMusic)
         cout<<x.front()<<endl;
     */
-    //deleteWords(vSplitWords);
     
     return 0;
 }
