@@ -18,6 +18,7 @@ unordered_map<string, int> stopWords;
 unordered_map<string, vector<int>> index0;
 vector<string> vLoadData;
 vector<string> vSplitWords;
+vector<vector<string>> totalMusic;
 
 // parameter: absolute path of dataset
 // no output, save all words in "unordered_map wordLibrary"
@@ -144,9 +145,30 @@ int main (){
     loadWordLibrary
         ("/Users/juewang/Desktop/search_machine/search_machine/百度分词词库.txt");
     loadStopWords("/Users/juewang/Desktop/search_machine/search_machine/中文停用词库.txt");
-    loadData("/Users/juewang/Desktop/search_machine/search_machine/music.json");
+    loadData("/Users/juewang/Desktop/search_machine/search_machine/music.txt");
+    for (vector<string>::iterator it = vLoadData.begin() ; it != vLoadData.end(); ++it)
+        cout << ' ' << *it;
+    cout << '\n';
+    
+    
+    
     for(auto& x: vLoadData)
-        splitWords(x);
-    deleteWords(vSplitWords);
+        
+        totalMusic.push_back(splitWords(x));
+        for (int i = 0; i < totalMusic[0].size() ; i++) { // print all string in first vector of 'arr'
+           cout << totalMusic[0][i] << " ";
+        }
+    
+        
+    
+        
+    /*
+    
+    for(auto& x: totalMusic)
+        cout<<x.front()<<endl;
+    */
+    //deleteWords(vSplitWords);
+    
     return 0;
 }
+
