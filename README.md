@@ -1,4 +1,3 @@
-
 The file “search_engine.cpp” trains the Hash Table and B tree in C++ The processes of my code can be broken down into following steps:
 1. Defined the loadWordLibrary function to save segmentation lexicon
 2. Defined the loadStopWords function to save unnecessary chinese characters thesaurus.
