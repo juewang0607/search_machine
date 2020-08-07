@@ -9,6 +9,7 @@
 #include <iomanip>
 #include <fstream>
 #include <unordered_map>
+#include <map>
 #include <vector>
 using namespace std;
 
@@ -149,48 +150,116 @@ vector<string> deleteWords(vector<string> v){
 }
 
 
-/*
 // parameter: vector(different music) of vector(various words within the music)
 // no output, save index in "unordered_map index", word as key, list of music index who contains that word as value
-void buildInvertIndex(vector<vector<string>> music) {
-    for (auto& x: music)
+void buildInvertIndex(vector<vector<string>> totalMusic) {
+    for(int i = 0; i<totalMusic.size(); i++)
     {
+        vector<string> music = totalMusic[i];
+        for(auto word: music)//throughout all elements in the vector
+        {
+            if(index0.count(word) == 0)//if the word doesn't exist
+            {
+                vector<int> temp;//creat a new link to save the word which doesn't exist
+                index0[word] = temp;
+            }
+            index0[word].push_back(i); // if the word exists,put it into the vector
+        }
         
     }
-    
+    return;
 }
-*/
 
+vector<int> computeScore(vector<string>& query_words)
+{
+    unordered_map<int,int> score;//a vector to save the music ID with the score
+                                // music ID -> music score
+    for(auto word: query_words)//throughout all elements in the input vector
+    {
+        vector<int> idList = index0[word]; //get the list of the music ID
+        for(auto id: idList)
+        {
+            score[id] += 1;// if find the same id, then plus one score
+        }
+    }
+    map<int,vector<int>> score_invert; //save the music Id with score in order
+                                        // muisic score -> music ID
+    //1->[1,2] which means the first and the second song get 1 score
+    //2->[3] which means that the third song gets 2 scores
+    for (auto iter = score.begin(); iter!=score.end();iter++)
+    {
+        int id = iter->first; //get the music id
+        int score = iter->second; //get the music score
+        if(score_invert.count(score) == 0)
+        {
+            vector<int> temp;
+            score_invert[score] = temp;
+        }
+         score_invert[score].push_back(id);
+    }
+    
+    vector<int> res;
+    for(auto iter = score_invert.begin();iter!=score_invert.end();iter++) {
+        vector<int> idList = iter->second;
+        for(auto id: idList) {
+            res.push_back(id);
+        }
+    }
+    reverse(res.begin(),res.end());//reverse the vector;
+    
+    
+    return res;
+}
 
+//show the recommendation
+void show(vector<int>& recommendations) {
+    for(int i = 0; i<recommendations.size();i++) {
+        int id = recommendations[i];
+        cout << "Recommendation " + to_string(i) << endl;
+        cout << vLoadData[id] << endl;
+    }
+    return;
+}
 
 int main (){
     loadWordLibrary
         ("/Users/juewang/Desktop/search_machine/search_machine/百度分词词库.txt");
     loadStopWords("/Users/juewang/Desktop/search_machine/search_machine/中文停用词库.txt");
     loadData("/Users/juewang/Desktop/search_machine/search_machine/music.txt");
-    for (vector<string>::iterator it = vLoadData.begin() ; it != vLoadData.end(); ++it)
-    {
-        cout << ' ' << *it;
-        
-    }
-    cout << '\n';
-    string check_element = "";
-    for(auto& x: vLoadData){
-        totalMusic.push_back(splitWords(x));
-    }
-    for (int j = 0; j < totalMusic.size() ;j++)
-    {
-        for (int i = 0; i < totalMusic[j].size() ; i++) { // print all string in first vector of 'arr'
-               cout <<" the " << j << " song: " <<totalMusic[j][i] << " "<< endl;
-           }
-    }
-   
-    /*
     
-    for(auto& x: totalMusic)
-        cout<<x.front()<<endl;
-    */
-    //deleteWords(vSplitWords);
+    //find out wether the data saved in the vector successfully
+    /*
+    for (vector<string>::iterator it = vLoadData.begin() ; it != vLoadData.end(); ++it)
+        cout << ' ' << *it;
+    cout << '\n';
+    
+    
+     */
+    
+    vector<vector<string>> totalMusic;
+    /*
+    //sanity check
+    for(auto& x: vLoadData) {
+        totalMusic.push_back(deleteWords(splitWords(x)));
+        
+        for (int i = 0; i < totalMusic[0].size() ; i++) { // print all string in first vector of 'arr'
+           cout << totalMusic[0][i] << " ";
+        }
+    }
+     */
+    
+    buildInvertIndex(totalMusic);
+
+    //get the input from the command line
+    
+    
+    string input;
+    cout<<"the music"<<endl;
+    cin >> input;
+    vector<string> query_words = deleteWords(splitWords(input));//split the input and delete the unnecessary words;
+    vector<int> recommendations = computeScore(query_words);
+
+    show(recommendations);
     
     return 0;
 }
